@@ -1,0 +1,105 @@
+<odoo>
+
+    <div t-name="dummy">hello bos</div>
+
+
+    <div t-name="screen"
+         class="screen"
+         t-ref="screen"
+         t-on-keypress="onkeypress"
+         tabindex="0">
+        <div class="calculator" style="display: none1;">
+            
+            <t t-call="animation" />
+            <!-- <t t-call="visual" /> -->
+            <input type="text" class="calculator-screen" t-model="state.expression"  />
+            <t t-call="keypad" />
+        </div>
+    </div>
+
+
+
+    <div t-name="visual" class="visual">
+        <t t-foreach="state.instruction" t-as="i" t-key="i_index">
+            <t t-set="n" t-value="i"/>
+            <t t-if="!window.isNaN(n) and n gte 10">
+                <t t-set="s" t-value="window.String(n)[0]"/>
+                <t t-set="n" t-value="window.String(n)[1]"/>
+                <img t-attf-src="images/#{s}.png" class="flip"/>
+            </t>
+            <img t-attf-src="images/#{n=='+'?'plus': n=='-'?'minus': n}.png" t-if="n!=0 or i gte 10"/>
+        </t>
+        <img t-if="state.instruction.length==0" src="images/0.png" class="shade"/>
+    </div>
+
+
+
+    <div t-name="animation" class="animation visual">
+        <div>
+
+            <!-- <img src="images/0.png" class="flip"/> -->
+            <!-- <img src="images/1.png" /> -->
+            <!-- <Glove num="20" id="'tl'" kiri="true" /> -->
+            <!-- <Glove num="1" id="'tr'" /> -->
+            <Glove t-props="state.tl"  />
+            <Glove t-props="state.tr"  />
+        </div>
+        <div>
+            <!-- <Glove num="40" id="'bl'" color="'#7fa51a'" kiri="true" /> -->
+            <!-- <Glove num="5" id="'br'" color="'#7fa51a'" /> -->
+
+            <Glove t-props="state.bl"  />
+            <Glove t-props="state.br"  />
+
+            <!-- <img src="images/plus.png" /> -->
+
+            <!-- <img src="images/2.png" class="flip"/> -->
+            <!-- <img src="images/2.png" /> -->
+            <div class="formula" t-if="state.formula.visible">
+                <!-- <Glove num="+40" left="10" color="'#7fa51a'" kiri="true" /> -->
+                <!-- <Glove num="50" left="130" top="20" color="'#7fa51a'" kiri="true"/> -->
+                <!-- <Glove num="-10" left="240" top="20" color="'#cf577dff'" kiri="true"/> -->
+                <Glove t-props="state.fl"/>
+                <Glove t-props="state.fr"/>
+            </div>
+        </div>
+                <!-- <img src="images/plus.png" /> -->
+                <!-- <img src="images/5.png" /> -->
+                <!-- <img src="images/minus.png" /> -->
+                <!-- <img src="images/4.png" /> -->
+    </div>
+
+
+
+
+    <div t-name="keypad" class="calculator-keys" t-on-click="keypad_click">
+        <!--
+        <button type="button" class="operator" value="*">×</button>
+        <button type="button" class="operator" value="/">÷</button>
+        <button type="button" class="all-clear" value="all-clear">AC</button>
+        <button type="button" class="all-clear" value="all-clear">&lt;</button>
+        -->
+    
+        <button type="button" value="7">7</button>
+        <button type="button" value="8">8</button>
+        <button type="button" value="9">9</button>
+        <button type="button" class="operator " value="-">-</button>
+    
+        <button type="button" value="4">4</button>
+        <button type="button" value="5">5</button>
+        <button type="button" value="6">6</button>
+        <button type="button" class="operator row2" value="+">+</button>
+    
+        <button type="button" value="1">1</button>
+        <button type="button" value="2">2</button>
+        <button type="button" value="3">3</button>
+        <!-- <button type="button" class="operator" value="*">&times;</button> -->
+    
+        <button type="button" class="all-clear" value="c">C</button>
+        <button type="button" value="0" class="">0</button>
+        <!-- <button type="button" class="decimal" value=".">.</button> -->
+        <!-- <button type="button" class="operator" value="/">&divide;</button> -->
+
+        <button type="button" class="equal-sign col2" value="=">=</button>
+    </div>
+</odoo>
