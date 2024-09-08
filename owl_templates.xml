@@ -1,4 +1,190 @@
 <odoo>
+<ion-app t-name="App">
+    <ion-split-pane content-id="main">
+
+        <t t-call="sidebar-menu"/>
+
+        <div class="ion-page" id="main" style="">
+                <ion-header class="ion-no-border" style="--ion-toolbar-background: transparent;">
+                    <ion-toolbar>
+                        <ion-buttons slot="start">
+                            <ion-menu-button></ion-menu-button>
+                        </ion-buttons>
+                        <ion-buttons slot="primary">
+                            <ion-button t-on-click="starClick"> 
+                                <t t-out="store.coin" />
+                                <ion-icon t-if="store.coin lte 0" slot="end" name="star-outline"></ion-icon>
+                                <ion-icon t-if="store.coin gt 0" slot="end" name="star" color="warning"></ion-icon>
+                            </ion-button>
+                            
+                        </ion-buttons>
+                        <!-- <ion-title>Example</ion-title> -->
+                    </ion-toolbar>
+                </ion-header>
+            <ion-content fullscreen="true" style="position:absolute; inset:0; --background:#d1ced8;">
+                <Jarimatika t-if="!state.game" level="state.level"/>
+                <t  t-if="state.game">
+                    <!-- <t t-out="theGame()" /> -->
+                    <iframe src="games/tower-blocks/index.htm" style="width:100vw; height:100vh;" width="100%" height="400"></iframe>
+                </t>
+            </ion-content>
+        </div>
+
+    </ion-split-pane>
+    <!-- <div t-out="hms.hmr" /> -->
+</ion-app> 
+
+<ion-menu t-name="sidebar-menu" type="overlay" content-id="main">
+
+    <ion-header>
+        <ion-toolbar>
+            <ion-title>JarimatikAufa</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content >
+        <ion-list>
+
+            <ion-list-header>Tambah &amp; Kurang</ion-list-header>
+
+            <ion-menu-toggle>
+            <ion-item button="true" t-att-data-menu="menu_index"
+                t-foreach="data.menu" t-as="menu" t-key="menu_index"
+                t-on-click="menuClick"
+            >
+                <t t-set="active" t-value="menu_index == state.level" />
+                <ion-icon t-att-color="active? 'success': ''" slot="start" t-att-name="menu.icon + (active?'':'-outline')" size="large"></ion-icon>
+                <ion-label t-out="menu.title"/>
+                <ion-note slot="end" t-out="menu.note"/>
+            </ion-item>
+            </ion-menu-toggle>
+
+            <!-- 
+            <ion-item button="true">
+                <ion-icon color="danger" slot="start" name="list-circle" size="large"></ion-icon>
+                <ion-label>General</ion-label>
+                <ion-note slot="end">6</ion-note>
+            </ion-item>
+            <ion-item button="true">
+                <ion-icon color="tertiary" slot="start" name="list-circle" size="large"></ion-icon>
+                <ion-label>Shopping</ion-label>
+                <ion-note slot="end">15</ion-note>
+            </ion-item>
+            <ion-item button="true">
+                <ion-icon color="success" slot="start" name="list-circle" size="large"></ion-icon>
+                <ion-label>Cleaning</ion-label>
+                <ion-note slot="end">3</ion-note>
+            </ion-item>
+            <ion-item button="true">
+                <ion-icon color="warning" slot="start" name="list-circle" size="large"></ion-icon>
+                <ion-label>Reminders</ion-label>
+                <ion-note slot="end">8</ion-note>
+            </ion-item>
+             -->
+        </ion-list>
+<!-- 
+        <ion-list lines="none">
+            <ion-list-header>Conference</ion-list-header>
+
+            <t t-foreach="appPages" t-as="p" t-key="p_index">
+                <ion-menu-toggle autoHide="false">
+                    <ion-item detail="false" t-att-routerLink="p.url"  routerLinkActive="selectedrla" routerDirection="root">
+                        <ion-icon slot="start" t-attf-name="{{p.icon}}-outline"></ion-icon>
+                        <ion-label t-out="p.title"/>
+                    </ion-item>
+                </ion-menu-toggle>
+            </t>
+        </ion-list>
+ -->
+        <ion-list inset="true">
+            <ion-item button="true" detail="false">
+                <div class="unread-indicator-wrapper" slot="start">
+                    <div class="unread-indicator"></div>
+                </div>
+                <ion-label>
+                    <strong>Rick Astley</strong>
+                    <ion-text>Never Gonna Give You Up</ion-text>
+                    <br />
+                    <ion-note color="medium" class="ion-text-wrap">
+          Never gonna give you up Never gonna let you down Never gonna run...
+                    </ion-note>
+                </ion-label>
+                <div class="metadata-end-wrapper" slot="end">
+                    <ion-note color="medium">06:11</ion-note>
+                    <ion-icon color="medium" name="chevron-forward"></ion-icon>
+                </div>
+            </ion-item>
+            
+        </ion-list>
+    </ion-content>
+
+</ion-menu>
+          
+<t t-name="Soal" >
+    
+    <!-- <t t-call="soal-grid"/> -->
+    <t t-call="soal-billioner"/>
+</t>
+
+
+
+<div t-name="soal-billioner" class="ion-padding">
+    
+    <ion-text color="primary">
+        <h1><t t-out="state.soal"/></h1>
+    </ion-text>
+    
+    <div style="text-align: center;">
+        <t t-foreach="state.jawaban2" t-as="jawaban" t-key="jawaban_index">
+            <ion-button size="large"
+                t-att-fill="jawaban == state.jawaban? 'solid': 'outline'" 
+                t-on-click="setJawaban" t-att-value="jawaban"
+            >
+                <t t-out="jawaban"/>
+                <ion-icon slot="start" 
+                    t-att-name="jawaban == state.jawaban? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
+            </ion-button>
+        </t>
+        <!-- 
+        <ion-button fill="outline"  size="large">14</ion-button>
+        <ion-button fill="outline"  size="large">26</ion-button>
+        <ion-button fill="outline"  size="large">4</ion-button>
+         -->
+    </div>
+    
+</div>
+
+
+
+<div t-name="soal-grid" class="calculator-keys" t-on-click="keypad_click">
+<!--
+        <button type="button" class="operator" value="*">×</button>
+        <button type="button" class="operator" value="/">÷</button>
+        <button type="button" class="all-clear" value="all-clear">AC</button>
+        <button type="button" class="all-clear" value="all-clear">&lt;</button>
+
+    <button type="button" class="col2" 
+        t-foreach="state.soal" t-as="soal" t-key="soal_index" 
+        t-att-value="soal" 
+        t-out="soal" 
+    />
+        -->
+
+        <t t-set="offset" t-value="state.page * 8"/>
+        <t t-foreach="[0,1,2,3,4,5,6,7]" t-as="i" t-key="i">
+            <t t-set="soal" t-value="state.soal[offset+i]"/>
+            <button type="button" class="col2" 
+                t-att-value="soal" 
+                t-out="soal" 
+            />
+        </t>
+    
+        <button type="button" value="">&lt;</button>
+        <button type="button" value="" class="">&gt;</button>
+        <!-- <button type="button" class="decimal" value=".">.</button> -->
+        <!-- <button type="button" class="operator" value="/">&divide;</button> -->
+    
+        <button type="button" class="equal-sign col2" value="=">=</button>
+</div>
 
     <div t-name="dummy">hello bos</div>
 
@@ -12,12 +198,16 @@
             
             <t t-call="animation" />
             <!-- <t t-call="visual" /> -->
-            <input type="text" class="calculator-screen" t-model="state.expression"  />
-            <t t-call="keypad" />
+            <!-- <t t-call="calculator" /> -->
+            <Soal level="props.level" play.bind="runInstructions" setSoal.bind="setSoal"/>
         </div>
     </div>
 
 
+    <t t-name="calculator">
+        <input type="text" class="calculator-screen" t-model="state.expression"  />
+        <t t-call="keypad" />
+    </t>
 
     <div t-name="visual" class="visual">
         <t t-foreach="state.instruction" t-as="i" t-key="i_index">
