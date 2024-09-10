@@ -1,0 +1,88 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	/* padding: 20px; */
+	font-size: 18px;
+	font-family: monospace;
+	max-width: 700px;
+}
+
+h1, h2 {
+	font-size: 18px;
+}
+
+h1 a {
+	font-weight: normal;
+}
+
+h1, h2, p, img, ul, ol, pre {
+	margin-bottom: 20px;
+	line-height: 1.4;
+}
+
+a, a:visited {
+	color: blue;
+}
+
+img {
+	max-width:100%;
+}
+
+ul li {
+	margin-left: 15px;
+}
+
+ol li {
+	margin-left: 30px;
+}
+
+pre {
+	font-size: 14px;
+	background: #eee;
+	padding: 5px;
+}
+
+p code, li code {
+	background: #eee;
+}
+
+/* --- */
+
+/* body#game {
+	padding: 20px 0;
+} */
+
+#game h1 {
+	padding: 0 20px;
+}
+
+main {
+    padding-top: 80px;
+	max-width: 100%;
+	user-select: none;
+	background: #3498db;
+	text-align: center;
+}
+
+#instructions {
+	color: white;
+	padding-top: 15px;
+}
+
+#controls {
+	flex-direction: row;
+	gap: 15px;
+	display: none;
+	padding: 0 15px 15px 15px;
+}
+
+#controls span {
+	opacity: 0.2;
+	flex: 1;
+	padding: 15px;
+	cursor: pointer;
+	background: white;
+}

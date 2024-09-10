@@ -10,23 +10,80 @@
                         <ion-buttons slot="start">
                             <ion-menu-button></ion-menu-button>
                         </ion-buttons>
-                        <ion-buttons slot="primary">
+                        <!-- <ion-buttons slot="primary" >
                             <ion-button t-on-click="starClick"> 
+                            <ion-button id="game-trigger"> 
                                 <t t-out="store.coin" />
                                 <ion-icon t-if="store.coin lte 0" slot="end" name="star-outline"></ion-icon>
-                                <ion-icon t-if="store.coin gt 0" slot="end" name="star" color="warning"></ion-icon>
+                                <ion-icon t-if="store.coin gt 0" slot="end" name="star"></ion-icon>
                             </ion-button>
-                            
-                        </ion-buttons>
+                        </ion-buttons> -->
                         <!-- <ion-title>Example</ion-title> -->
                     </ion-toolbar>
                 </ion-header>
+                <!-- <ion-popover trigger="game-trigger" trigger-action="click">
+                     <ion-content >
+                        <ion-list>
+                            <ion-item button="true" lines="none" size="small">
+                                <ion-icon slot="start" name="layers" size="large"></ion-icon>
+                                <ion-label>Tower Boxs</ion-label>
+                            </ion-item>
+                            <ion-item button="true">
+                                <ion-icon color="primary" slot="start" name="footsteps" size="large"></ion-icon>
+                                <ion-label>Cuboid</ion-label>
+                            </ion-item>
+                            <ion-item button="true">
+                                <ion-icon color="medium" slot="start" name="hand-right-sharp" size="large"></ion-icon>
+                                <ion-label>Belajar</ion-label>
+                            </ion-item>
+                            <ion-item button="true">
+                                <ion-icon color="medium" slot="start" name="calculator" size="large"></ion-icon>
+                                <ion-label>Calculator</ion-label>
+                            </ion-item>
+                        </ion-list>
+                    </ion-content>
+                </ion-popover> -->
+
             <ion-content fullscreen="true" style="position:absolute; inset:0; --background:#d1ced8;">
-                <Jarimatika t-if="!state.game" level="state.level"/>
-                <t  t-if="state.game">
-                    <!-- <t t-out="theGame()" /> -->
-                    <iframe src="games/tower-blocks/index.htm" style="width:100vw; height:100vh;" width="100%" height="400"></iframe>
-                </t>
+
+                <ion-fab slot="fixed" vertical="top" horizontal="end">
+                    <ion-fab-button size="large" style="
+                        --background: var(--ion-color-light);
+                        --background: #e0ac08;
+                        --background: transparent;
+                        --color: black;
+                        --box-shadow: none;"
+                    >
+                        <!-- <ion-icon name="star"></ion-icon> -->
+                        <ion-chip>
+                            <ion-label><t t-out="store.coin" /></ion-label>
+                            <ion-icon name="star"></ion-icon>
+                        </ion-chip>
+                    </ion-fab-button>
+                    <ion-fab-list side="bottom">
+                        <t t-foreach="['tower', 'cuboid', 'quiz', 'calculator']" t-as="game" t-key="game">
+                            <ion-fab-button t-on-click="gameClick" t-att="{disabled: state.game == game}" t-att-data-game="game">
+                                <ion-icon t-att-name="game"></ion-icon>
+                            </ion-fab-button>
+                        </t>
+
+                       <!--  <ion-fab-button>
+                            <ion-icon name="layers"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button>
+                            <ion-icon name="footsteps"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button>
+                            <ion-icon name="calculator"></ion-icon>
+                        </ion-fab-button> -->
+                    </ion-fab-list>
+                </ion-fab>
+
+                <Jarimatika t-if="state.game == 'quiz'" level="state.level"/>
+                <iframe t-if="state.game == 'tower'" src="games/tower-blocks/index.htm" style="width:100vw; height:100vh;" width="100%" height="400"></iframe>
+                <iframe t-if="state.game == 'cuboid'" src="games/cuboid/index.htm" style="width:100vw; height:100vh;" width="100%" height="400"></iframe>
+                <!-- <h1 t-if="state.game == 'cuboid'" >Belum jadi 😛</h1> -->
+                <h1 t-if="state.game == 'calculator'" >Belum jadi 😛</h1>
             </ion-content>
         </div>
 
@@ -130,18 +187,18 @@
 <div t-name="soal-billioner" class="ion-padding">
     
     <ion-text color="primary">
-        <h1><t t-out="state.soal"/></h1>
+        <h1 style="font-size: 53px; text-align: center;"><t t-out="state.soal"/> = ...</h1>
     </ion-text>
     
-    <div style="text-align: center;">
+    <div style="text-align: center;" class="jawaban2">
         <t t-foreach="state.jawaban2" t-as="jawaban" t-key="jawaban_index">
-            <ion-button size="large"
+            <ion-button style="font-size: 42px;"
                 t-att-fill="jawaban == state.jawaban? 'solid': 'outline'" 
                 t-on-click="setJawaban" t-att-value="jawaban"
             >
                 <t t-out="jawaban"/>
-                <ion-icon slot="start" 
-                    t-att-name="jawaban == state.jawaban? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
+                <!-- <ion-icon slot="start" 
+                    t-att-name="jawaban == state.jawaban? 'checkmark-circle' : 'ellipse-outline'"></ion-icon> -->
             </ion-button>
         </t>
         <!-- 

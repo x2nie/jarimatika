@@ -168,16 +168,20 @@ class Game {
         this.STATES = {
             'LOADING': 'loading',
             'PLAYING': 'playing',
-            'READY': 'ready',
-            'ENDED': 'ended',
-            'RESETTING': 'resetting'
+            'WAITCOIN': 'wait-coin',    // check coin
+            'READY': 'ready',           // coin available
+            'NOCOIN': 'no-coin',        // not enough coin
+            'ENDED': 'ended',           // ?
+            'RESETTING': 'resetting',
         };
         this.blocks = [];
         this.state = this.STATES.LOADING;
+        this.waiting_for_coin = true;  // true = during negotiate for coin
         this.stage = new Stage();
         this.mainContainer = document.getElementById('container');
         this.scoreContainer = document.getElementById('score');
         this.startButton = document.getElementById('start-button');
+        this.exitButton = document.getElementById('exit-button');
         this.instructions = document.getElementById('instructions');
         this.scoreContainer.innerHTML = '0';
         this.newBlocks = new THREE.Group();
@@ -188,19 +192,45 @@ class Game {
         this.stage.add(this.choppedBlocks);
         this.addBlock();
         this.tick();
-        this.updateState(this.STATES.READY);
+        // this.updateState(this.STATES.READY);
+        this.updateState(this.STATES.WAITCOIN);
+        window.onmessage = (e) => {
+            console.log('tower-game.receive msg:', e.data)
+            const [key,value] = e.data.split(':')
+            // if (key ==  'usedCoin') {
+            //     let coin = parseInt(value)
+            //     const state = coin == 0 ? this.STATES.NOCOIN : this.STATES.READY
+            //     if(this.state == this.STATES.WAITCOIN){
+            //         this.updateState(state);
+            //     }
+            // }
+            // else 
+            if (key ==  'availableCoin') {
+                this.waiting_for_coin = false;
+                let coin = parseInt(value)
+                this.mainContainer.classList.toggle('coins', coin>=5)
+                const state = coin < 5 ? this.STATES.NOCOIN : this.STATES.READY
+                if(this.state == this.STATES.WAITCOIN){
+                    this.updateState(state);
+                }
+            }
+        };
+        window.top.postMessage('askCoin:5', '*')
         document.addEventListener('keydown', e => {
             if (e.keyCode == 32)
                 this.onAction();
         });
         document.addEventListener('click', e => {
-            this.onAction();
+            this.onAction(e);
         });
         document.addEventListener('touchstart', e => {
             e.preventDefault();
             // this.onAction();
             // ☝️ this triggers after click on android so you
             // insta-lose, will figure it out later.
+        });
+        this.exitButton.addEventListener('click', e => {
+            this.exit(e);
         });
     }
     updateState(newState) {
@@ -209,7 +239,7 @@ class Game {
         this.mainContainer.classList.add(newState);
         this.state = newState;
     }
-    onAction() {
+    onAction(e) {
         switch (this.state) {
             case this.STATES.READY:
                 this.startGame();
@@ -220,9 +250,18 @@ class Game {
             case this.STATES.ENDED:
                 this.restartGame();
                 break;
+            case this.STATES.NOCOIN:
+                this.exit(e)
+                break;
         }
     }
+    exit(e){
+        e.preventDefault()
+        e.stopPropagation()
+        window.top.postMessage('noGame:1', '*')        
+    }
     startGame() {
+        window.top.postMessage('useCoin:5', '*')
         if (this.state != this.STATES.PLAYING) {
             this.scoreContainer.innerHTML = '0';
             this.updateState(this.STATES.PLAYING);
@@ -288,7 +327,9 @@ class Game {
             this.instructions.classList.add('hide');
     }
     endGame() {
-        this.updateState(this.STATES.ENDED);
+        // this.updateState(this.STATES.ENDED);
+        window.top.postMessage('askCoin:5', '*')
+        this.updateState(this.STATES.WAITCOIN);
     }
     tick() {
         this.blocks[this.blocks.length - 1].tick();
@@ -297,4 +338,3 @@ class Game {
     }
 }
 let game = new Game();
-//# sourceURL=pen.js

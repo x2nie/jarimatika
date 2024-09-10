@@ -62,15 +62,21 @@ html, body {
   align-items: center;
   justify-content: space-around;
 }
-#container .game-ready #start-button {
+
+/* HIDE TEXTS */
+#container .game-ready .buttons {
   transition: opacity 0.5s ease, transform 0.5s ease;
   opacity: 0;
   transform: translatey(-50px);
-  border: 3px solid #333344;
+}
+#container .game-ready .btn {
+  display: inline-block;
   padding: 10px 20px;
   background-color: transparent;
   color: #333344;
   font-size: 30px;
+  border: 3px solid #333344;
+  border: 3px solid transparent;
 }
 #container #instructions {
   position: absolute;
@@ -84,23 +90,41 @@ html, body {
 #container #instructions.hide {
   opacity: 0 !important;
 }
-#container.playing #score, #container.resetting #score {
+
+/* SHOW STATE TEXT */
+#container.playing #score, 
+#container.resetting #score {
   transform: translatey(0px) scale(1);
 }
 #container.playing #instructions {
   opacity: 1;
 }
-#container.ready .game-ready #start-button {
+#container.ready .game-ready .buttons,
+#container.no-coin .game-ready .buttons {
   opacity: 1;
   transform: translatey(0);
 }
 #container.ended #score {
   transform: translatey(6vh) scale(1.5);
 }
-#container.ended .game-over * {
+#container.ended .game-over *,
+#container.no-coin .game-over * {
   opacity: 1;
   transform: translatey(0);
 }
 #container.ended .game-over p {
   transition-delay: 0.3s;
+}
+
+/* no-coins */
+#container #start-button {
+  display: none;
+}
+#container:not(.coins) #exit-button {
+  border-color: currentColor;
+}
+/* coins */
+#container.coins #start-button {
+  display: inline-block;
+  border-color: currentColor;
 }
